@@ -1,0 +1,14 @@
+<%= form_for :sync, :url => {:action => 'update'}, :html => {:class => 'input_form'}, :remote =>true do |f| %>
+  
+  <% if @sync.errors.any? %>
+      <h2><%= pluralize(@sync.errors.count, "error") %> prohibited this post from being saved:</h2>
+      <ul>
+      <% @sync.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+  <% end %>
+  
+  <%= f.text_area :data, :size=>"100*100", :class => 'data_text'%>
+  <%= f.submit "Submit", :class => 'submit_button' %>
+<% end %>
