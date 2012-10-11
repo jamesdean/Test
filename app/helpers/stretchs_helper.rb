@@ -1,0 +1,2 @@
+module StretchsHelper
+end
