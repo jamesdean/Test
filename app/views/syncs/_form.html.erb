@@ -1,4 +1,4 @@
-<%= form_for :sync, :url => {:action => 'update'}, :html => {:class => 'input_form'}, :remote =>true do |f| %>
+<%= form_for :sync, :url => {:action => 'update'}, :html => {:class => 'input_form'}, :remote => true do |f| %>
   
   <% if @sync.errors.any? %>
       <h2><%= pluralize(@sync.errors.count, "error") %> prohibited this post from being saved:</h2>
@@ -9,6 +9,47 @@
       </ul>
   <% end %>
   
-  <%= f.text_area :data, :size=>"100*100", :class => 'data_text'%>
+  <%= f.text_area :data, :size=>"100*100", :id => 'data_text'%>
   <%= f.submit "Submit", :class => 'submit_button' %>
 <% end %>
+
+<script type="text/javascript">
+	
+	var update_function;
+	var update_timer;
+	var enable = true;
+	
+	$('.submit_button').click(function(){
+		enable =true;	
+	});
+	
+	update_function = function(){				
+				    $.ajax({
+				        url: '<%= url_for :action => 'update' %>', 
+				        data: {data:"sync"},
+				        dataType: "JSON",
+				        cashe:false,
+				        type: "PUT"
+				    }).success(function(json){	    	
+				    	//alert(json.data);
+				    	$('#data_text').val(json.data);	    	
+				    });	
+				};
+				
+	if(enable) {
+		update_timer = setInterval("update_function()" , 100);			
+	}
+			
+	$('#data_text').focusout(function() {
+		//alert(2);
+		if(enable) {
+			update_timer = setInterval("update_function()", 100);
+		}
+	});
+					
+	$('#data_text').focus(function() {
+		//alert(1);
+		clearInterval(update_timer);								
+	});
+								
+</script>

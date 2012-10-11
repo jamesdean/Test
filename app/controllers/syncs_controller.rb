@@ -3,10 +3,7 @@ class SyncsController < ApplicationController
   respond_to :json, :js, :html
   def index
     @syncs = Sync.all
-    #@sync = Sync.new  # added
-    
-    @sync = Sync.find(:first)    
-    @sync = Sync.new unless @sync
+    @sync = Sync.new  # added
     
     respond_to do |format|
       format.html
@@ -15,15 +12,19 @@ class SyncsController < ApplicationController
   end
    
   def create
-    #@sync = Sync.new(params[:sync])
-    #@sync.save
+   
   end
   
-  def update
-    #@sync = Sync.new(params[:sync])
+  def update    
+    @sync = Sync.find(:last)   
+    @sync.update_attributes(params[:sync])
+    
     respond_to do |format|
-      format.html
-    end    
+        #format.html
+        format.json { render json: @sync, status: :created, location: @sync }
+        format.js  {render :content_type => 'text/javascript'}
+    end
+    
   end
 
 end
